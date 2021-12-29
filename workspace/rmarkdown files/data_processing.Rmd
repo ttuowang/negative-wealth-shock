@@ -1,0 +1,268 @@
+---
+title: "Association Of A Negative Wealth Shock With All-Cause Mortality In Middle-Aged And Older Adults In The United States" 
+subtitle: 'A Causal Inference Project: Part I Data Processing'
+author: "Tuo Wang"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	fig.align = "center",
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE,
+	comment = "#>"
+)
+knitr::opts_knit$set(root.dir = '/Users/tuowang/Documents/Research/negative-wealth-shock')
+```
+
+
+## Preparation
+
+```{r}
+#setwd("/Users/tuowang/Documents/UW-Madison Fall 2019/STAT 992/992finalproject")
+library(tidyverse)
+library(haven)
+library(readr)
+```
+
+## Data Processing
+
+The dataset is downloaded from the HRS website. There are three dataset:
+
+- RAND HRS Detailed Imputations File 2016 (V1): `randhrsimp1992_2016v1.sas7bdat`
+
+  *This data contains all the information about wealth*
+  
+- RAND HRS Longitudinal File 2016 (V1): `randhrs1992_2016v1.sas7bdat`
+
+  *This data contains all the covariates*
+
+- HEALTH AND RETIREMENT STUDY 2016 Tracker: `TRK2016TR_R`
+
+  *This data contains some baseline covariates*
+
+```{r,eval=FALSE}
+randhrsimp1992_2016v1 <- read_sas(
+  "data/randhrsimp1992_2016v1_SAS/randhrsimp1992_2016v1.sas7bdat", 
+  NULL)
+randhrs1992_2016v1 <- read_sas(
+  "data/randhrs1992_2016v1_SAS/randhrs1992_2016v1.sas7bdat", 
+  NULL)
+dim(randhrsimp1992_2016v1)
+dim(randhrs1992_2016v1)
+```
+
+Note that the order of randhrs1992_2016v1 and randhrsimp1992_2016v1 are the same. The unique identifier for each case is HHIDPN. First, select all the people in the original HRS cohort, born in 1931 through 1941. Use the `cohort` variable to subset the HRS cases.
+
+```{r,eval=FALSE}
+hrs.id <- randhrs1992_2016v1$HHIDPN[randhrs1992_2016v1$HACOHORT == 3]
+hrs <- randhrs1992_2016v1[randhrs1992_2016v1$HACOHORT == 3, ]
+hrsimp <- randhrsimp1992_2016v1[randhrs1992_2016v1$HACOHORT == 3,]
+```
+
+Now, import the tracker files and get the subset of cases in original HRS cohort.
+
+```{r,eval=FALSE}
+# Extract information in the tracker file 
+# Set path to the data file "*.DA"
+data.file <- "./data/tracker file/trk2016/TRK2016TR_R.da"
+# Set path to the dictionary file "*.DCT"
+dict.file <- "./data/tracker file/trk2016/TRK2016TR_R.dct"
+# Read the dictionary file
+df.dict <- read.table(dict.file, skip = 1, fill = TRUE, stringsAsFactors = FALSE)
+# Set column names for dictionary dataframe
+colnames(df.dict) <- c("col.num","col.type","col.name","col.width","col.lbl")
+# Remove first and last row which only contains a closing }
+df.dict <- df.dict[-nrow(df.dict),]
+df.dict <- df.dict[-1, ]
+# Extract numeric value from column width field
+df.dict$col.width <- as.integer(
+  sapply(
+    df.dict$col.width, 
+    gsub, 
+    pattern = "[^0-9\\.]", 
+    replacement = "")
+  )
+# Convert column types to format to be used with read_fwf function
+df.dict$col.type <- sapply(
+  df.dict$col.type, 
+  function(x) ifelse(x %in% c("int","byte","long"), 
+                     "i", ifelse(x == "float", "n", 
+                                 ifelse(x == "double", "d", "c")))
+  )
+# Read the data file into a dataframe
+tracker <- read_fwf(
+  file = data.file, 
+  fwf_widths(widths = df.dict$col.width, col_names = df.dict$col.name), 
+  col_types = paste(df.dict$col.type, collapse = "")
+  )
+# Add column labels to headers
+attributes(tracker)$variable.labels <- df.dict$col.lbl
+
+# Add HHIDPN, HHIDPN = 1000* HHID + PN
+tracker$HHIDPN <- as.numeric(tracker$HHID) * 1000 + as.numeric(tracker$PN)
+
+# Select the subset and arrange by HHIDPN
+tracker2 <- filter(tracker, HHIDPN %in% hrs.id) %>% arrange(HHIDPN)
+```
+
+There is one case that doesn't have tracker file, we can delete it. Case `HHIDPN=56354031`.
+
+```{r,eval=FALSE}
+setdiff(hrsimp$HHIDPN,tracker2$HHIDPN)
+hrs <- filter(hrs, HHIDPN!=56354031)
+hrsimp <- filter(hrsimp, HHIDPN!=56354031)
+```
+
+Next, we need to check the first interview year. We can see most of people (12543) have their first 
+interview in 1992, only 1072 cases have their first interview after 1992. Thus, we only include cases that have first interview in 1992 in the analysis. Also we only include cases that were born between 1931 and 1941. 
+
+```{r,eval=FALSE}
+cond <- (tracker2$FIRSTIW==1992 & tracker2$BIRTHYR >=1931 & tracker2$BIRTHYR<=1941)
+hrs.id.1992 <- tracker2$HHIDPN[cond]
+
+tracker.1992 <- tracker2[cond, ]
+hrs.1992 <- hrs[cond,]
+hrsimp.1992 <- hrsimp[cond,]
+```
+
+Here is a preview of the dataset. 
+
+```{r}
+# For saving running, we directly import the data here.
+load("./data/data_1992.RData")
+knitr::kable(tracker.1992[1:5,1:5], row.names = FALSE)
+knitr::kable(hrs.1992[1:5,1:5], row.names = FALSE)
+knitr::kable(hrsimp.1992[1:5,1:5], row.names = FALSE)
+```
+
+
+## Negative Wealth Shock
+
+There are covaiates in "RAND HRS Detailed Imputations File 2016 (V1)" that assess the wealth including housing, businesses, individual retirement accounts, checking and saving accounts, investment holdings, vehicles, and any other substantial assets. To measure negative wealth shock, we first adjusted all net worth values to 2016 dollars. Differences in net worth between two consecutive waves were used to calculate a negative wealth shock, defined as a loss of 75% or more in a participants's household net worth.
+
+```{r,eval=FALSE}
+HwITOT <- c("H1ITOT","H2ITOT","H3ITOT","H4ITOT","H5ITOT",
+            "H6ITOT","H7ITOT","H8ITOT","H9ITOT","H10ITOT",
+            "H11ITOT","H12ITOT","H13ITOT")
+
+HwSHOCK <- c("H1SHOCK","H2SHOCK","H3SHOCK","H4SHOCK",
+             "H5SHOCK","H6SHOCK","H7SHOCK","H8SHOCK",
+             "H9SHOCK","H10SHOCK","H11SHOCK","H12SHOCK")
+
+inflation <- c(1.71, 1.62, 1.53, 1.47, 1.39,
+               1.33, 1.27, 1.19, 1.11, 1.10,
+               1.05, 1.01, 1.0)
+
+wealth <- dplyr::select(hrsimp.1992,HHIDPN, HwITOTA) %>%
+  mutate( H1NET  =  1.71*(H1ATOTA),
+          H2NET  =  1.62*(H2ATOTA),
+          H3NET  =  1.53*(H3ATOTA),
+          H4NET  =  1.47*(H4ATOTA),
+          H5NET  =  1.39*(H5ATOTA),
+          H6NET  =  1.33*(H6ATOTA),
+          H7NET  =  1.27*(H7ATOTA),
+          H8NET  =  1.19*(H8ATOTA),
+          H9NET  =  1.11*(H9ATOTA),
+          H10NET =  1.10*(H10ATOTA),
+          H11NET =  1.05*(H11ATOTA),
+          H12NET =  1.01*(H12ATOTA),
+          H13NET =  1.00* H13ATOTA) %>%
+  dplyr::select(HHIDPN,HwNET) %>%
+  mutate( H1DIFF = H1NET - H2NET,
+          H2DIFF = H2NET - H3NET,
+          H3DIFF = H3NET - H4NET,
+          H4DIFF = H4NET - H5NET,
+          H5DIFF = H5NET - H6NET,
+          H6DIFF = H6NET - H7NET,
+          H7DIFF = H7NET - H8NET,
+          H8DIFF = H8NET - H9NET,
+          H9DIFF = H9NET - H10NET,
+          H10DIFF = H10NET - H11NET,
+          H11DIFF = H11NET - H12NET,
+          H12DIFF = H12NET - H13NET) %>%
+  mutate( H1SHOCK = ifelse(H1DIFF >= 0.75*H1NET, 1, 0),
+          H2SHOCK = ifelse(H2DIFF >= 0.75*H2NET, 1, 0),
+          H3SHOCK = ifelse(H3DIFF >= 0.75*H3NET, 1, 0),
+          H4SHOCK = ifelse(H4DIFF >= 0.75*H4NET, 1, 0),
+          H5SHOCK = ifelse(H5DIFF >= 0.75*H5NET, 1, 0),
+          H6SHOCK = ifelse(H6DIFF >= 0.75*H6NET, 1, 0),
+          H7SHOCK = ifelse(H7DIFF >= 0.75*H7NET, 1, 0),
+          H8SHOCK = ifelse(H8DIFF >= 0.75*H8NET, 1, 0),
+          H9SHOCK = ifelse(H9DIFF >= 0.75*H9NET, 1, 0),
+          H10SHOCK = ifelse(H10DIFF >= 0.75*H10NET, 1, 0),
+          H11SHOCK = ifelse(H11DIFF >= 0.75*H11NET, 1, 0),
+          H12SHOCK = ifelse(H12DIFF >= 0.75*H12NET, 1, 0))
+
+wealth$SHOCKTOT <- NA
+cond1 <- rowSums(is.na(wealth[,HwSHOCK])) != ncol(wealth[,HwSHOCK])
+wealth$SHOCKTOT[cond1] <- rowSums(wealth[cond1,HwSHOCK], na.rm = TRUE)
+wealth$SHOCK <- ifelse(wealth$SHOCKTOT==0,0,1)
+```
+
+### All-Cause Mortality
+
+Mortality information can be found in the tracker file. It almost has all the information about death of the participants.
+
+```{r, eval=FALSE}
+death <- dplyr::select(tracker.1992, HHIDPN, KNOWNDECEASEDYR) %>%
+  mutate(MORTALITY = ifelse(is.na(KNOWNDECEASEDYR), 0, 1)) %>%
+  rename( DEATHYR = KNOWNDECEASEDYR) 
+
+death$YEAR <- death$DEATHYR
+death$YEAR[is.na(death$DEATHYR)] <- tracker.1992$LASTALIVEYR[is.na(death$DEATHYR)]
+
+wealth.mortality <- dplyr::select(
+  cbind.data.frame(wealth,death[,-1]), HHIDPN, 
+  SHOCKTOT, SHOCK,
+  DEATHYR, MORTALITY, YEAR)
+```
+
+### Data integration
+
+We removed the cases that doesn't have enought information for negative wealth shock.
+
+```{r, eval=FALSE}
+# remove cases that doesn't have enought information for negative wealth shock
+cond2 <- !is.na(wealth.mortality$SHOCK) 
+
+rwshock <- wealth[cond2, ]
+wealth.mortality.final <- wealth.mortality[cond2, ]
+tracker.final <- tracker.1992[cond2,]
+hrs.final <- hrs.1992[cond2, ]
+hrsimp.final <- hrsimp.1992[cond2, ]
+```
+
+Here is a preview of the final clean data.
+
+```{r}
+# For saving running, we directly import the data here.
+load("./data/data_12_01.RData")
+knitr::kable(wealth.mortality.final[1:10,], row.names = FALSE)
+```
+
+- `HHIDPN`: Unique identifier
+- `SHOCKTOT`: Total number of negative wealth shock
+- `SHOCK`: An indicator function of whether experiencing negative wealth shock
+- `DEATHYR`: Year of death
+- `MORTALITY`: Dead or not
+- `YEAR`: Follow-up year
+
+
+
+
+
+
+
+
+
+
+
+

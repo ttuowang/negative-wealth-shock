@@ -1,0 +1,640 @@
+---
+title: "Association Of A Negative Wealth Shock With All-Cause Mortality In Middle-Aged And Older Adults In The United States" 
+subtitle: 'A Causal Inference Project: Part II Data Analysis'
+author: "Tuo Wang"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	fig.align = "center",
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE,
+	comment = "#>"
+)
+knitr::opts_knit$set(root.dir = '/Users/tuowang/Documents/Research/negative-wealth-shock')
+```
+
+In this rmarkdown file, we want to dig into the hrs data and answer the following question: **Does negative wealth shock cause an increase in all-cause mortality?**
+
+## 0. Preparation
+
+For saving running time, we saved the clean dataset in `.RData` files. We can use `load` function in R to import the dataset.
+
+```{r}
+# Preparation
+library(tidyverse)
+library(survival)
+library(survminer)
+library(grid)
+library(ggplot2)
+library(gridExtra)
+library(scales)
+library(ggthemes)
+
+source("./workspace/plotting.R")
+#load("./data/data_box/data_11_27.RData")
+load("./data/data_12_01.RData")
+```
+
+## 1. Exploratory data analysis
+
+In this section, we did some exploratory data analysis. First, we calculated the follow-up time for each cases and we generated the plot of number of death versus years. 
+
+```{r, fig.width=5, fig.height=4}
+df <- mutate(wealth.mortality.final, 
+             STATUS = ifelse(!is.na(tracker.final$KNOWNDECEASEDYR),1,0))
+
+df$TIME <- df$YEAR - 1992
+
+# A: Exploratory Data Analysis
+
+# Chi-square test
+#table(df$SHOCK, df$MORTALITY)
+#chisq.test(df$SHOCK,df$MORTALITY)
+
+# Total follow-up year:
+#sum(df$TIME)
+
+# See the death rate
+#table(df$STATUS[df$SHOCK==1])
+#sum(df$STATUS[df$SHOCK==1] ==1)/sum(df$SHOCK==1)
+#table(df$STATUS[df$SHOCK==0])
+#sum(df$STATUS[df$SHOCK==0] ==1)/sum(df$SHOCK==0)
+
+# Figure, number of death vs year
+deathyear <- data.frame( table(df$DEATHYR))
+names(deathyear) <- c("year", "death")
+deathyear$year <- as.numeric(as.character(deathyear$year))
+
+ggplot(deathyear[-24,], aes(x=year, y=death)) + 
+  geom_point(size=2,alpha=0.7,color="#386cb0") +
+  geom_line(alpha=0.9,color="#386cb0") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  scale_x_continuous(breaks = seq(1992, 2016,2))
+
+```
+
+Later, we select out 11 baseline covariates including age at enrollment, self-reported sex, self-reported race, whether is Hispanic or not, educational attainment, health behaviors including smoking status, alcohol consumption, physical activity and body mass index. We also included 2 indicators: (1) financial risk aversion and (2) expectation of leaving a bequest upon death. Here is the code book for the baseline covariates:
+
+- Age at 1992 interview: 'AAGE' from tracker file (continuous)
+- self-reported sex: 'RAGENDER' from hrs file (categorical)
+- self-reported race/ethnicity: 'RARACEM' from hrs file (categorical)
+- Whether Hispanic: 'RAHISPAN' from hrs file (categorical)
+- educational attainment: RAEDYRS from hrs file (continuous)
+- smoking status: R1SMOKEN from hrs (categorical)
+- alcohol consumption: R1DRINKR from hrs (categorical)
+- physical activity: R1VIGACT from hrs (categorical)
+- BMI: hrs.final$R1BMI from hrs (continuous)
+- Financial risk aversion: R1RISK from hrs (categorical)
+- leave a bequest: R1BEQLRG from hrs (categorical)
+
+We also generated the box plot of the three continuous covaiates between people experienced negative wealth shock and people didn't experience negative wealth shock.
+
+```{r}
+baseline_x <- select(hrs.final, HHIDPN,RAGENDER,RARACEM,
+                     RAHISPAN,RAEDYRS,R1SMOKEN,R1DRINKR,
+                     R1VIGACT,R1BMI,R1RISK,R1BEQLRG) 
+baseline_x$AAGE <- tracker.final$AAGE
+
+baseline_x <- drop_na(baseline_x)
+
+df2 <- merge(df,baseline_x,by="HHIDPN")
+df2 <- mutate(df2, RAGENDER = factor(RAGENDER),
+              RARACEM  = factor(RARACEM),
+              RAHISPAN = factor(RAHISPAN),
+              R1SMOKEN = factor(R1SMOKEN),
+              R1DRINKR = factor(R1DRINKR),
+              R1VIGACT = factor(R1VIGACT),
+              R1RISK   = factor(R1RISK),
+              R1BEQLRG = factor(R1BEQLRG))
+```
+
+
+```{r, fig.width=7, fig.height=4}
+p1=ggplot(df2, aes(x=factor(SHOCK),y=R1BMI)) + 
+  geom_boxplot(aes(fill = factor(SHOCK) ),alpha=00.7) +
+  theme_bw()+
+  theme(legend.position='bottom')+
+  labs(x = "Negative weatlth shock", fill="shock",y='BMI')+
+  scale_fill_Publication()
+
+p2=ggplot(df2, aes(x=factor(SHOCK),y=RAEDYRS)) + 
+  geom_boxplot(aes(fill = factor(SHOCK) ),alpha=00.7) +
+  theme_bw()+
+  theme(legend.position='bottom')+
+  labs(x = "Negative weatlth shock", fill="shock",
+       y='Education attainment')+
+  scale_fill_Publication()
+
+p3=ggplot(df2, aes(x=factor(SHOCK),y=AAGE)) + 
+  geom_boxplot(aes(fill = factor(SHOCK) ),alpha=00.7) +
+  theme_bw()+
+  theme(legend.position='bottom')+
+  labs(x = "Negative weatlth shock", fill="shock",y='Age')+
+  scale_fill_Publication()
+
+grid.arrange(p1,p2,p3, ncol=3)
+```
+
+From the boxplot above, we can see that `age` and `bmi` are pretty balancing among different group. However, people that didn't experience any negative wealth shock tends to have higher education level or longer education attainment. Thus, matching is an important step to meansure the causal effect between negative wealth shock and all-cause mortality
+
+## 2. Matching with baseline covariates
+
+After including covariates and removing NAs, we have 8409 cases remaining. In the 8409 cases, 3162 cases experienced at least one negative wealth shock (treatment group) while 5247 never experienced any negative wealth shock (control group). 
+
+```{r}
+source("./workspace/mahal_func.R") # R code for Mahalanobis distance and caliper.
+library(optmatch)
+```
+
+### 2.1 Propensity Score Caliper Matching
+
+We want to match the 3162 cases in treatment group to the cases in the control group. We used pair matching. `optmatch` package took a very long time, like forever, to finish matching the 3162 cases in the treatment group to the 5247 cases in the control group. So, we divided the data into two piece, and did matching in each subset data. We didn't show the code here, it is very long. We included all the codes about matching in `matching.r`. `matching.r` include the code of propensity score caliper matching with baseline covariates and risk set matching with both baseline and time-varying covariates. We saved the result in `match_data_12_01.RData`.
+
+```{r, eval=FALSE}
+## Propensity score caliper matching
+#-------------------------------------------------------------------------------#
+df3 <- df2[1:4000, ]
+propscore.model <- glm(SHOCK ~ RAGENDER+RARACEM+RAHISPAN+RAEDYRS+R1SMOKEN+
+                         R1DRINKR+R1VIGACT+R1BMI+R1RISK+R1BEQLRG+AAGE,
+                       x = TRUE, y = TRUE,
+                       family = binomial, data = df3)
+X = propscore.model$x[,-1] #remove intercept
+A = propscore.model$y
+logitps = predict(propscore.model)
+distmat=smahal(A,X) 
+# Label the rows and columns of the distance matrix by the subject id numbers in the data; you can set it something else as well.
+rownames(distmat)= rownames(df3)[A == 1]
+colnames(distmat)= rownames(df3)[A == 0]
+# Penalize this matrix
+distmat_caliper=addcaliper(distmat,A,logitps,calipersd = 0.5)
+
+noControls = 1# Pair match 1 control to each treated
+matchvec=pairmatch(distmat_caliper,controls=noControls,data=df3) #The last argument is used to re-order the output; it doesn't actually use the data itself.
+# each column represents who they are and the individual's logit PS value
+matchvec.num = as.numeric(substr(matchvec,start=3,stop=10))
+matchvec.num.notNA = matchvec.num[!is.na(matchvec.num)] #To remove individuals who didn't get matched.
+matchID = unique(matchvec.num.notNA)
+I = length(matchID)
+matchedPairMat = matrix(0,I,4)
+colnames(matchedPairMat) = c("SubjectID (Treated)","SubjectID (Control)","PS (Treated)","PS (Control)")
+treatedSubjID = rownames(df3)[A==1]
+controlSubjID = rownames(df3)[A==0]
+for(i in 1:I) {
+  subjectIDs = which(matchvec.num == matchID[i])
+  matchedPairMat[i,"SubjectID (Treated)"] = subjectIDs[subjectIDs %in% treatedSubjID]
+  matchedPairMat[i,"SubjectID (Control)"] = subjectIDs[subjectIDs %in% controlSubjID]
+  matchedPairMat[i,"PS (Treated)"] = round(logitps[matchedPairMat[i,"SubjectID (Treated)"]],3)
+  matchedPairMat[i,"PS (Control)"] = round(logitps[matchedPairMat[i,"SubjectID (Control)"]],3)
+}
+#-------------------------------------------------------------------------------#
+df4 <- df2[4001:8409, ]
+propscore.model <- glm(SHOCK ~ RAGENDER+RARACEM+RAHISPAN+RAEDYRS+R1SMOKEN+
+                         R1DRINKR+R1VIGACT+R1BMI+R1RISK+R1BEQLRG+AAGE,
+                       x = TRUE, y = TRUE,
+                       family = binomial, data = df4)
+X = propscore.model$x[,-1] #remove intercept
+A = propscore.model$y
+logitps = predict(propscore.model)
+distmat=smahal(A,X) 
+# Label the rows and columns of the distance matrix by the subject id numbers in the data; you can set it something else as well.
+rownames(distmat)= rownames(df4)[A == 1]
+colnames(distmat)= rownames(df4)[A == 0]
+# Penalize this matrix
+distmat_caliper=addcaliper(distmat,A,logitps,calipersd = 0.5)
+distmat_caliper[1:4,1:7]
+
+noControls = 1# Pair match 1 control to each treated
+matchvec2=pairmatch(distmat_caliper,controls=noControls,data=df4) #The last argument is used to re-order the output; it doesn't actually use the data itself.
+# each column represents who they are and the individual's logit PS value
+matchvec.num2 = as.numeric(substr(matchvec2,start=3,stop=10))
+matchvec.num.notNA2 = matchvec.num2[!is.na(matchvec.num2)] #To remove individuals who didn't get matched.
+matchID2 = unique(matchvec.num.notNA2)
+I = length(matchID2)
+matchedPairMat2 = matrix(0,I,4)
+colnames(matchedPairMat2) = c("SubjectID (Treated)","SubjectID (Control)","PS (Treated)","PS (Control)")
+rownames(df4) = as.numeric(rownames(df4)) - 4000
+treatedSubjID = rownames(df4)[A==1]
+controlSubjID = rownames(df4)[A==0]
+for(i in 1:I) {
+  subjectIDs = which(matchvec.num2 == matchID2[i])
+  matchedPairMat2[i,"SubjectID (Treated)"] = subjectIDs[subjectIDs %in% treatedSubjID]
+  matchedPairMat2[i,"SubjectID (Control)"] = subjectIDs[subjectIDs %in% controlSubjID]
+  matchedPairMat2[i,"PS (Treated)"] = round(logitps[matchedPairMat2[i,"SubjectID (Treated)"]],3)
+  matchedPairMat2[i,"PS (Control)"] = round(logitps[matchedPairMat2[i,"SubjectID (Control)"]],3)
+}
+matchedPairMat2[,1] <- matchedPairMat2[,1]+4000
+matchedPairMat2[,2] <- matchedPairMat2[,2]+4000
+
+save(matchedPairMat,matchedPairMat2, file = "./data/data_box/match_data_12_01.RData")
+```
+
+### 2.2 Matching Performance
+
+Next we want to see how's the performancing of the matching.
+
+```{r, fig.width=6,fig.height=6}
+load("./data/match_data_12_01.RData")
+matchedpair <- rbind(matchedPairMat,matchedPairMat2)
+
+knitr::kable(head(matchedpair), row.names = FALSE)
+
+propscore.model <- glm(SHOCK ~ RAGENDER+RARACEM+RAHISPAN+RAEDYRS+R1SMOKEN+
+                         R1DRINKR+R1VIGACT+R1BMI+R1RISK+R1BEQLRG+AAGE,
+                       x = TRUE, y = TRUE,
+                       family = binomial, data = df2)
+
+X = propscore.model$x[,-1] #remove intercept
+A = propscore.model$y
+logitps = predict(propscore.model)
+
+X.treatment.before <- X[df2$SHOCK==1, ]
+X.control.before <- X[df2$SHOCK==0, ]
+
+X.treatment.after <- X[matchedpair[,1], ]
+X.control.after <- X[matchedpair[,2], ]
+
+treatmean.before <- apply(X.treatment.before, 2, mean)
+treatvar.before <- apply(X.treatment.before, 2, var)
+controlmean.before <- apply(X.control.before, 2, mean)
+controlvar.before <- apply(X.control.before, 2, var)
+
+treatmean.after <- apply(X.treatment.after, 2, mean)
+treatvar.after <- apply(X.treatment.after, 2, var)
+controlmean.after <- apply(X.control.after, 2, mean)
+controlvar.after <- apply(X.control.after, 2, var)
+
+stand.diff.before <- (treatmean.before - controlmean.before)/sqrt((treatvar.before+controlvar.before)/2)
+stand.diff.after <- (treatmean.after - controlmean.after)/sqrt((treatvar.after+controlvar.after)/2)
+
+standBeforeAfter = cbind(stand.diff.before,stand.diff.after)
+
+colnames(standBeforeAfter ) = c("Before Match (Standardized Diff)",
+                                "After Match (Standardized Diff)")
+
+knitr::kable(round(abs(standBeforeAfter),3), caption = "Differences in Covariates (Before and After)")
+
+abs.stand.diff.before=abs(stand.diff.before)
+abs.stand.diff.after=abs(stand.diff.after)
+covariates=names(stand.diff.before)
+plot.df=data.frame(abs.stand.diff=c(abs.stand.diff.before,abs.stand.diff.after),
+                   covariates=rep(covariates,2),
+                   type=c(rep("Before",length(covariates)),
+                          rep("After",length(covariates))))
+fig2 <- ggplot(plot.df,aes(x=abs.stand.diff,y=covariates))+
+  geom_point(size=3,aes(color=factor(type)), alpha=0.8)+
+  scale_shape_manual(values=c(4,1))+
+  geom_vline(xintercept=c(.1,.2),lty=2) +
+  scale_colour_Publication()+
+  labs(color = "Before or After matching") +
+  theme_bw() +
+  theme(legend.position="top") 
+
+fig2
+```
+
+### 2.3 Estimated risk difference in matched set
+
+The risk difference between treatment group and control group can be estimated by using a two sample paired t-test. The estimated risk difference is $0.0404$. The 95% CI is $[0.018, 0.063]$
+
+```{r}
+df.treatment <- df2[matchedpair[,1],]
+df.control <- df2[matchedpair[,2],]
+
+t.test(df.treatment$MORTALITY, df.control$MORTALITY,paired=TRUE)
+```
+
+## 3. Risk Set Matching with baseline and time-varying covariates
+
+### 3.1 Time-varying covariates
+
+We included the following time-varying covariates in our analysis:
+
+- marital status: 'RwMSTATH'
+- labor force status: 'RwLBRF'
+- self report health: 'RwSHLT'
+- whether health limited the ability to work: 'RwHLTHLM'
+- hospitalization in the past 2 years: 'RwHOSP'
+- history of 8 chronic donditions:
+  - hypertension: RwHIBPE
+  - diabetes or high blood sugar:RwDIABE
+  - cancer or a malignant tumor of any kind except skin cancer:RwCANCRE
+  - chronic lung disease except asthma such as chronic bronchitis or emphysema: RwLUNGE
+  - heart attack, coronary heart disease, angina, congestive heart failure, or other heart problems: RwHEARTE
+  - stroke or transient ischemic attack: RwSTROKE
+  - emotional, nervous, or psychiatric problems: RwPSYCHE
+  - arthritis or rheumatism: RwARTHRE 
+
+```{r}
+RwMSTATH <- paste0("R",c(1:13),"MSTATH") # 9 cats
+RwLBRF <- paste0("R",c(1:13),"LBRF")     # 7 cats
+RwSHLT <-paste0("R",c(1:13),"SHLT")      # 5 cats
+RwHLTHLM <-paste0("R",c(1:13),"HLTHLM")  # 2 cats
+RwHOSP <- paste0("R",c(1:13),"HOSP")     # 2 cats
+RwHIBPE <- paste0("R",c(1:13),"HIBPE")   # 2 cats
+RwDIABE <-paste0("R",c(1:13),"DIABE")    # 2 cats
+RwCANCRE <- paste0("R",c(1:13),"CANCRE") # 2 cats
+RwLUNGE <- paste0("R",c(1:13),"LUNGE")   # 2 cats
+RwHEARTE <- paste0("R",c(1:13),"HEARTE") # 2 cats
+RwSTROKE <- paste0("R",c(1:13),"STROKE") # 2 cats
+RwPSYCHE <- paste0("R",c(1:13),"PSYCHE") # 2 cats
+RwARTHRE <- paste0("R",c(1:13),"ARTHRE") # 2 cats
+
+timevarying_x <- dplyr::select(
+  hrs.final,HHIDPN, RwMSTATH,RwLBRF,RwSHLT,
+  RwHLTHLM,RwHOSP,RwHIBPE,RwDIABE,RwCANCRE,
+  RwLUNGE,RwHEARTE,RwSTROKE,RwPSYCHE,RwARTHRE)
+
+# df2 is the dataframe containing all the baseline covariates without any NAs.
+
+HwSHOCK <- c("H1SHOCK","H2SHOCK","H3SHOCK","H4SHOCK",
+             "H5SHOCK","H6SHOCK","H7SHOCK","H8SHOCK",
+             "H9SHOCK","H10SHOCK","H11SHOCK","H12SHOCK")
+
+df5 <- merge(df2, timevarying_x,by="HHIDPN")
+df5 <- merge(df5, dplyr::select(rwshock,HHIDPN,HwSHOCK), by="HHIDPN")
+#df6 <- df5
+# Factorize variables
+for(i in c(20:32)){
+  df5[, i] <- factor(df5[,i], levels = c(1:9))
+}
+for(i in c(33:45)){
+  df5[, i] <- factor(df5[,i], levels = c(1:7))
+}
+for(i in c(46:58)){
+  df5[, i] <- factor(df5[,i], levels = c(1:5))
+}
+for(i in c(59:188)){
+  df5[, i] <- factor(df5[,i])
+}
+```
+
+### 3.2 risk set matching
+
+For the detailed code of risk set matching, please look at `matching.r`. We saved the result in `risksetmatch_df_all.RData`. We have 12 time point, 1994,  1996, 1998, 2000, 2002, 2004, 2006, 2008, 2010, 2012, 2014, 2016. At each time point $T$, we match the treated cases to the control cases by using the value of the covariates up to time $T$. For details about risk set matching, please refer to Li (2011). At time $T$, some cases are in control group but maybe later in the future, some of time may be treated.
+
+```{r, eval=FALSE}
+# (II). Risk set matching.
+matchpair <- function(dataf){
+  
+  rownames(dataf) = c(1:nrow(dataf))
+  formulaa <- as.formula( paste0(names(dataf)[ncol(dataf)],'~.-HHIDPN' ) )
+  propscore.model <- glm(formulaa,
+                         x = TRUE, y = TRUE,
+                         family = binomial, data = dataf)
+  X = propscore.model$x[,-1] #remove intercept
+  A = propscore.model$y
+  logitps = predict(propscore.model)
+  distmat=smahal(A,X) 
+  rownames(distmat)= rownames(dataf)[A == 1]
+  colnames(distmat)= rownames(dataf)[A == 0]
+  distmat_caliper=addcaliper(distmat,A,logitps,calipersd = 0.5)
+  noControls = 1# Pair match 1 control to each treated
+  matchvec=pairmatch(distmat_caliper,controls=noControls,data=df) #The last argument is used to re-order the output; it doesn't actually use the data itself.
+  #summary(matchvec)
+  #print(matchvec, grouped = TRUE)
+  # each column represents who they are and the individual's logit PS value
+  matchvec.num = as.numeric(substr(matchvec,start=3,stop=10))
+  matchvec.num.notNA = matchvec.num[!is.na(matchvec.num)] #To remove individuals who didn't get matched.
+  matchID = unique(matchvec.num.notNA)
+  I = length(matchID)
+  matchedPairMat = matrix(0,I,4)
+  colnames(matchedPairMat) = c("SubjectID (Treated)","SubjectID (Control)","PS (Treated)","PS (Control)")
+  treatedSubjID = rownames(dataf)[A==1]
+  controlSubjID = rownames(dataf)[A==0]
+  for(i in 1:I) {
+    subjectIDs = which(matchvec.num == matchID[i])
+    matchedPairMat[i,"SubjectID (Treated)"] = subjectIDs[subjectIDs %in% treatedSubjID]
+    matchedPairMat[i,"SubjectID (Control)"] = subjectIDs[subjectIDs %in% controlSubjID]
+    matchedPairMat[i,"PS (Treated)"] = round(logitps[matchedPairMat[i,"SubjectID (Treated)"]],3)
+    matchedPairMat[i,"PS (Control)"] = round(logitps[matchedPairMat[i,"SubjectID (Control)"]],3)
+  }
+
+  matchedPairMat[,1] <- dataf$HHIDPN[matchedPairMat[,1]]
+  matchedPairMat[,2] <- dataf$HHIDPN[matchedPairMat[,2]]
+  return(matchedPairMat)
+}
+
+# Year 1994, wave 2:
+baseline_var <- names(df2)[9:19]
+df_wave2 <- dplyr::select( df5, HHIDPN,baseline_var,R2MSTATH,R2LBRF,
+                           R2SHLT,R2HLTHLM,R2HOSP,R2HIBPE,R2DIABE,R2CANCRE,
+                           R2LUNGE,R2HEARTE,R2STROKE,R2PSYCHE,R2ARTHRE,H1SHOCK) %>%
+  drop_na()
+
+rownames(df_wave2) = c(1:nrow(df_wave2))
+matchedPairMat_wave2 <- matchpair(df_wave2)
+treatedID <- matchedPairMat_wave2[,1]
+
+# Year 1996, wave 3:
+df_wave3 <- dplyr::select( df5, HHIDPN,baseline_var,R3MSTATH,R3LBRF,
+                           R3SHLT,R3HLTHLM,R3HOSP,R3HIBPE,R3DIABE,R3CANCRE,
+                           R3LUNGE,R3HEARTE,R3STROKE,R3PSYCHE,R3ARTHRE,H2SHOCK) %>%
+  filter( !(HHIDPN %in% treatedID)) %>%
+  drop_na()
+
+matchedPairMat_wave3 <- matchpair(df_wave3)
+treatedID <- c(treatedID, matchedPairMat_wave3[,1])
+
+# Year 1998, wave 4:
+df_wave4 <- dplyr::select( df5, HHIDPN,baseline_var,R4MSTATH,R4LBRF,
+                           R4SHLT,R4HLTHLM,R4HOSP,R4HIBPE,R4DIABE,R4CANCRE,
+                           R4LUNGE,R4HEARTE,R4STROKE,R4PSYCHE,R4ARTHRE,H3SHOCK) %>%
+  filter( !(HHIDPN %in% treatedID)) %>%
+  drop_na()
+
+matchedPairMat_wave4 <- matchpair(df_wave4)
+treatedID <- c(treatedID, matchedPairMat_wave4[,1])
+
+# Year 2000, wave 5:
+df_wave5 <- dplyr::select( df5, HHIDPN,baseline_var,R5MSTATH,R5LBRF,
+                           R5SHLT,R5HLTHLM,R5HOSP,R5HIBPE,R5DIABE,R5CANCRE,
+                           R5LUNGE,R5HEARTE,R5STROKE,R5PSYCHE,R5ARTHRE,H4SHOCK) %>%
+  filter( !(HHIDPN %in% treatedID)) %>%
+  drop_na()
+
+matchedPairMat_wave5 <- matchpair(df_wave5)
+treatedID <- c(treatedID, matchedPairMat_wave5[,1])
+
+# Year 2002, wave 6:
+df_wave6 <- dplyr::select( df5, HHIDPN,baseline_var,R6MSTATH,R6LBRF,
+                           R6SHLT,R6HLTHLM,R6HOSP,R6HIBPE,R6DIABE,R6CANCRE,
+                           R6LUNGE,R6HEARTE,R6STROKE,R6PSYCHE,R6ARTHRE,H5SHOCK) %>%
+  filter( !(HHIDPN %in% treatedID)) %>%
+  drop_na()
+
+matchedPairMat_wave6 <- matchpair(df_wave6)
+treatedID <- c(treatedID, matchedPairMat_wave6[,1])
+
+# Year 2004, wave 7:
+df_wave7 <- dplyr::select( df5, HHIDPN,baseline_var,R7MSTATH,R7LBRF,
+                           R7SHLT,R7HLTHLM,R7HOSP,R7HIBPE,R7DIABE,R7CANCRE,
+                           R7LUNGE,R7HEARTE,R7STROKE,R7PSYCHE,R7ARTHRE,H6SHOCK) %>%
+  filter( !(HHIDPN %in% treatedID)) %>%
+  drop_na()
+
+matchedPairMat_wave7 <- matchpair(df_wave7)
+treatedID <- c(treatedID, matchedPairMat_wave7[,1])
+
+# Year 2006, wave 8:
+df_wave8 <- dplyr::select( df5, HHIDPN,baseline_var,R8MSTATH,R8LBRF,
+                           R8SHLT,R8HLTHLM,R8HOSP,R8HIBPE,R8DIABE,R8CANCRE,
+                           R8LUNGE,R8HEARTE,R8STROKE,R8PSYCHE,R8ARTHRE,H7SHOCK) %>%
+  filter( !(HHIDPN %in% treatedID)) %>%
+  drop_na()
+
+matchedPairMat_wave8 <- matchpair(df_wave8)
+treatedID <- c(treatedID, matchedPairMat_wave8[,1])
+
+# Year 2008, wave 9:
+df_wave9 <- dplyr::select( df5, HHIDPN,baseline_var,R9MSTATH,R9LBRF,
+                           R9SHLT,R9HLTHLM,R9HOSP,R9HIBPE,R9DIABE,R9CANCRE,
+                           R9LUNGE,R9HEARTE,R9STROKE,R9PSYCHE,R9ARTHRE,H8SHOCK) %>%
+  filter( !(HHIDPN %in% treatedID)) %>%
+  drop_na()
+
+matchedPairMat_wave9 <- matchpair(df_wave9)
+treatedID <- c(treatedID, matchedPairMat_wave9[,1])
+
+# Year 2010, wave 10:
+df_wave10 <- dplyr::select( df5, HHIDPN,baseline_var,R10MSTATH,R10LBRF,
+                            R10SHLT,R10HLTHLM,R10HOSP,R10HIBPE,R10DIABE,R10CANCRE,
+                            R10LUNGE,R10HEARTE,R10STROKE,R10PSYCHE,R10ARTHRE,H9SHOCK) %>%
+  filter( !(HHIDPN %in% treatedID)) %>%
+  drop_na()
+
+matchedPairMat_wave10 <- matchpair(df_wave10)
+treatedID <- c(treatedID, matchedPairMat_wave10[,1])
+
+# Year 2012, wave 11:
+df_wave11 <- dplyr::select( df5, HHIDPN,baseline_var,R11MSTATH,R11LBRF,
+                            R11SHLT,R11HLTHLM,R11HOSP,R11HIBPE,R11DIABE,R11CANCRE,
+                            R11LUNGE,R11HEARTE,R11STROKE,R11PSYCHE,R11ARTHRE,H10SHOCK) %>%
+  filter( !(HHIDPN %in% treatedID)) %>%
+  drop_na()
+
+matchedPairMat_wave11 <- matchpair(df_wave11)
+treatedID <- c(treatedID, matchedPairMat_wave11[,1])
+
+# Year 2014, wave 12:
+df_wave12 <- dplyr::select( df5, HHIDPN,baseline_var,R12MSTATH,R12LBRF,
+                            R12SHLT,R12HLTHLM,R12HOSP,R12HIBPE,R12DIABE,R12CANCRE,
+                            R12LUNGE,R12HEARTE,R12STROKE,R12PSYCHE,R12ARTHRE,H11SHOCK) %>%
+  filter( !(HHIDPN %in% treatedID)) %>%
+  drop_na()
+
+matchedPairMat_wave12 <- matchpair(df_wave12)
+treatedID <- c(treatedID, matchedPairMat_wave12[,1])
+
+# Year 2016, wave 13:
+df_wave13 <- dplyr::select( df5, HHIDPN,baseline_var,R13MSTATH,R13LBRF,
+                            R13SHLT,R13HLTHLM,R13HOSP,R13HIBPE,R13DIABE,R13CANCRE,
+                            R13LUNGE,R13HEARTE,R13STROKE,R13PSYCHE,R13ARTHRE,H12SHOCK) %>%
+  filter( !(HHIDPN %in% treatedID)) %>%
+  drop_na()
+
+matchedPairMat_wave13 <- matchpair(df_wave13)
+treatedID <- c(treatedID, matchedPairMat_wave13[,1])
+
+matchedPairMat_all <- rbind(matchedPairMat_wave2,matchedPairMat_wave3,
+                            matchedPairMat_wave4,matchedPairMat_wave5,
+                            matchedPairMat_wave6,matchedPairMat_wave7,
+                            matchedPairMat_wave8,matchedPairMat_wave9,
+                            matchedPairMat_wave10,matchedPairMat_wave11,
+                            matchedPairMat_wave12,matchedPairMat_wave13)
+
+save(matchedPairMat_all, file = "./data/data_box/risksetmatch_mat_all.RData")
+a1 <- matchedPairMat_all[,1]
+a2 <- matchedPairMat_all[,2]
+
+rsmdf.treatment <- filter(df5, HHIDPN %in% matchedPairMat_all[,1])
+
+
+rsmdf.control <- filter(df5, HHIDPN %in% matchedPairMat_all[,2])
+
+rsmdf.control <- NULL
+for(i in c(1:length(a2))){
+  rsmdf.control <- rbind.data.frame(rsmdf.control,df5[df5$HHIDPN==a2[i], ])
+}
+
+save(rsmdf.treatment,rsmdf.control, file = "./data/data_box/risksetmatch_df_all.RData")
+```
+
+### 3.3 Estimated risk difference in matched set
+
+The risk difference between treatment group and control group can be estimated by using a two sample paired t-test. The estimated risk difference is $0.063$. The 95% CI is $[0.039, 0.088]$.
+
+```{r}
+load("./data/risksetmatch_df_all.RData")
+t.test(rsmdf.treatment$MORTALITY, rsmdf.control$MORTALITY,paired=TRUE)
+```
+
+## 4. Sensitivity Analysis
+
+### 4.1 Sensitivity Analysis on the pair matched set with baseline covariates
+
+```{r}
+library(sensitivitymw)
+library(sensitivitymv)
+
+Ymat.proj = data.frame(df.treatment$STATUS, df.control$STATUS)
+# senmw does matching with multiple controls (same number of controls)
+GammaSeq = seq(1,2,0.1)
+upperBound = matrix(0,length(GammaSeq),3)
+for(i in 1:length(GammaSeq)) {
+  upperBound[i,1] =senmw(Ymat.proj, gamma = GammaSeq[i], method = "t")$pval
+  upperBound[i,2] =senmw(Ymat.proj, gamma = GammaSeq[i], method = "p")$pval
+  upperBound[i,3] = senmw(Ymat.proj, gamma = GammaSeq[i], method = "w")$pval
+}
+out = cbind(GammaSeq,upperBound)
+colnames(out) = c("Gamma","t-test","trimmed mean test","weighted trimmed mean test")
+round(out,3)
+senmwCI(Ymat.proj, gamma = 1.1, method = "w", one.sided = TRUE)
+amplify(1.1, c(4 : 7)) #Here 4:7 is the \beta_{UA} amplitude
+uniroot(function(x){amplify(1.19,x) - x},c(1.19+0.01,10))$root
+```
+
+
+The weighted trimmed mean is least sensitive to unobserved confounder of magnitude $\Gamma$ To overturn the conclusion, we would need an unmeasured confounder whose odds of increasing the outcome and treatment is about 1.56 (from E-value). Alternatively, we need a $\Gamma$=1.1, which roughly corresponds to $0.476\leq p_s \leq 0.524$. Which means that it is sensitive to unmeasured confounder.
+
+### 4.2 Sensitivity Analysis on the pair matched set with baseline covariates
+
+```{r}
+library(sensitivitymw)
+library(sensitivitymv)
+
+Ymat.proj = data.frame(rsmdf.treatment$MORTALITY, rsmdf.control$MORTALITY)
+# senmw does matching with multiple controls (same number of controls)
+GammaSeq = seq(1,2,0.01)
+upperBound = matrix(0,length(GammaSeq),3)
+for(i in 1:length(GammaSeq)) {
+  upperBound[i,1] =senmw(Ymat.proj, gamma = GammaSeq[i], method = "t")$pval
+  upperBound[i,2] =senmw(Ymat.proj, gamma = GammaSeq[i], method = "p")$pval
+  upperBound[i,3] = senmw(Ymat.proj, gamma = GammaSeq[i], method = "w")$pval
+}
+out = cbind(GammaSeq,upperBound)
+colnames(out) = c("Gamma","t-test","trimmed mean test","weighted trimmed mean test")
+head(round(out,3))
+senmwCI(Ymat.proj, gamma = 1.13, method = "w", one.sided = TRUE)
+amplify(1.13, c(4 : 7)) #Here 4:7 is the \beta_{UA} amplitude
+uniroot(function(x){amplify(1.13,x) - x},c(1.13+0.01,10))$root
+```
+
+
+The weighted trimmed mean is least sensitive to unobserved confounder of magnitude $\Gamma$ To overturn the conclusion, we would need an unmeasured confounder whose odds of increasing the outcome and treatment is about 1.66 (from E-value). Alternatively, we need a $\Gamma$=1.13, which roughly corresponds to $0.47\leq p_s \leq 0.53$. Which means that it is sensitive to unmeasured confounder.
+
+
+
+
+
+
+

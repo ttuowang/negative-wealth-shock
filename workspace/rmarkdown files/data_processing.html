@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Tuo Wang" />
+
+<meta name="date" content="2021-12-29" />
+
+<title>Association Of A Negative Wealth Shock With All-Cause Mortality In Middle-Aged And Older Adults In The United States</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Association Of A Negative Wealth Shock With All-Cause Mortality In Middle-Aged And Older Adults In The United States</h1>
+<h3 class="subtitle">A Causal Inference Project: Part I Data Processing</h3>
+<h4 class="author">Tuo Wang</h4>
+<h4 class="date">2021-12-29</h4>
+
+
+
+<div id="preparation" class="section level2">
+<h2>Preparation</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#setwd(&quot;/Users/tuowang/Documents/UW-Madison Fall 2019/STAT 992/992finalproject&quot;)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span></code></pre></div>
+</div>
+<div id="data-processing" class="section level2">
+<h2>Data Processing</h2>
+<p>The dataset is downloaded from the HRS website. There are three dataset:</p>
+<ul>
+<li><p>RAND HRS Detailed Imputations File 2016 (V1): <code>randhrsimp1992_2016v1.sas7bdat</code></p>
+<p><em>This data contains all the information about wealth</em></p></li>
+<li><p>RAND HRS Longitudinal File 2016 (V1): <code>randhrs1992_2016v1.sas7bdat</code></p>
+<p><em>This data contains all the covariates</em></p></li>
+<li><p>HEALTH AND RETIREMENT STUDY 2016 Tracker: <code>TRK2016TR_R</code></p>
+<p><em>This data contains some baseline covariates</em></p></li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>randhrsimp1992_2016v1 <span class="ot">&lt;-</span> <span class="fu">read_sas</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;data/randhrsimp1992_2016v1_SAS/randhrsimp1992_2016v1.sas7bdat&quot;</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="cn">NULL</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>randhrs1992_2016v1 <span class="ot">&lt;-</span> <span class="fu">read_sas</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;data/randhrs1992_2016v1_SAS/randhrs1992_2016v1.sas7bdat&quot;</span>, </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="cn">NULL</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(randhrsimp1992_2016v1)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(randhrs1992_2016v1)</span></code></pre></div>
+<p>Note that the order of randhrs1992_2016v1 and randhrsimp1992_2016v1 are the same. The unique identifier for each case is HHIDPN. First, select all the people in the original HRS cohort, born in 1931 through 1941. Use the <code>cohort</code> variable to subset the HRS cases.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>hrs.id <span class="ot">&lt;-</span> randhrs1992_2016v1<span class="sc">$</span>HHIDPN[randhrs1992_2016v1<span class="sc">$</span>HACOHORT <span class="sc">==</span> <span class="dv">3</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>hrs <span class="ot">&lt;-</span> randhrs1992_2016v1[randhrs1992_2016v1<span class="sc">$</span>HACOHORT <span class="sc">==</span> <span class="dv">3</span>, ]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>hrsimp <span class="ot">&lt;-</span> randhrsimp1992_2016v1[randhrs1992_2016v1<span class="sc">$</span>HACOHORT <span class="sc">==</span> <span class="dv">3</span>,]</span></code></pre></div>
+<p>Now, import the tracker files and get the subset of cases in original HRS cohort.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract information in the tracker file </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Set path to the data file &quot;*.DA&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>data.file <span class="ot">&lt;-</span> <span class="st">&quot;./data/tracker file/trk2016/TRK2016TR_R.da&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set path to the dictionary file &quot;*.DCT&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>dict.file <span class="ot">&lt;-</span> <span class="st">&quot;./data/tracker file/trk2016/TRK2016TR_R.dct&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the dictionary file</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>df.dict <span class="ot">&lt;-</span> <span class="fu">read.table</span>(dict.file, <span class="at">skip =</span> <span class="dv">1</span>, <span class="at">fill =</span> <span class="cn">TRUE</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Set column names for dictionary dataframe</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df.dict) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;col.num&quot;</span>,<span class="st">&quot;col.type&quot;</span>,<span class="st">&quot;col.name&quot;</span>,<span class="st">&quot;col.width&quot;</span>,<span class="st">&quot;col.lbl&quot;</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove first and last row which only contains a closing }</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>df.dict <span class="ot">&lt;-</span> df.dict[<span class="sc">-</span><span class="fu">nrow</span>(df.dict),]</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>df.dict <span class="ot">&lt;-</span> df.dict[<span class="sc">-</span><span class="dv">1</span>, ]</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract numeric value from column width field</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>df.dict<span class="sc">$</span>col.width <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sapply</span>(</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    df.dict<span class="sc">$</span>col.width, </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    gsub, </span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">pattern =</span> <span class="st">&quot;[^0-9</span><span class="sc">\\</span><span class="st">.]&quot;</span>, </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">replacement =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert column types to format to be used with read_fwf function</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>df.dict<span class="sc">$</span>col.type <span class="ot">&lt;-</span> <span class="fu">sapply</span>(</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  df.dict<span class="sc">$</span>col.type, </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) <span class="fu">ifelse</span>(x <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;int&quot;</span>,<span class="st">&quot;byte&quot;</span>,<span class="st">&quot;long&quot;</span>), </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;i&quot;</span>, <span class="fu">ifelse</span>(x <span class="sc">==</span> <span class="st">&quot;float&quot;</span>, <span class="st">&quot;n&quot;</span>, </span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">ifelse</span>(x <span class="sc">==</span> <span class="st">&quot;double&quot;</span>, <span class="st">&quot;d&quot;</span>, <span class="st">&quot;c&quot;</span>)))</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the data file into a dataframe</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>tracker <span class="ot">&lt;-</span> <span class="fu">read_fwf</span>(</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">file =</span> data.file, </span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fwf_widths</span>(<span class="at">widths =</span> df.dict<span class="sc">$</span>col.width, <span class="at">col_names =</span> df.dict<span class="sc">$</span>col.name), </span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">paste</span>(df.dict<span class="sc">$</span>col.type, <span class="at">collapse =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Add column labels to headers</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="fu">attributes</span>(tracker)<span class="sc">$</span>variable.labels <span class="ot">&lt;-</span> df.dict<span class="sc">$</span>col.lbl</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Add HHIDPN, HHIDPN = 1000* HHID + PN</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>tracker<span class="sc">$</span>HHIDPN <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(tracker<span class="sc">$</span>HHID) <span class="sc">*</span> <span class="dv">1000</span> <span class="sc">+</span> <span class="fu">as.numeric</span>(tracker<span class="sc">$</span>PN)</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the subset and arrange by HHIDPN</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>tracker2 <span class="ot">&lt;-</span> <span class="fu">filter</span>(tracker, HHIDPN <span class="sc">%in%</span> hrs.id) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(HHIDPN)</span></code></pre></div>
+<p>There is one case that doesn’t have tracker file, we can delete it. Case <code>HHIDPN=56354031</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setdiff</span>(hrsimp<span class="sc">$</span>HHIDPN,tracker2<span class="sc">$</span>HHIDPN)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>hrs <span class="ot">&lt;-</span> <span class="fu">filter</span>(hrs, HHIDPN<span class="sc">!=</span><span class="dv">56354031</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>hrsimp <span class="ot">&lt;-</span> <span class="fu">filter</span>(hrsimp, HHIDPN<span class="sc">!=</span><span class="dv">56354031</span>)</span></code></pre></div>
+<p>Next, we need to check the first interview year. We can see most of people (12543) have their first interview in 1992, only 1072 cases have their first interview after 1992. Thus, we only include cases that have first interview in 1992 in the analysis. Also we only include cases that were born between 1931 and 1941.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>cond <span class="ot">&lt;-</span> (tracker2<span class="sc">$</span>FIRSTIW<span class="sc">==</span><span class="dv">1992</span> <span class="sc">&amp;</span> tracker2<span class="sc">$</span>BIRTHYR <span class="sc">&gt;=</span><span class="dv">1931</span> <span class="sc">&amp;</span> tracker2<span class="sc">$</span>BIRTHYR<span class="sc">&lt;=</span><span class="dv">1941</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>hrs.id<span class="fl">.1992</span> <span class="ot">&lt;-</span> tracker2<span class="sc">$</span>HHIDPN[cond]</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>tracker<span class="fl">.1992</span> <span class="ot">&lt;-</span> tracker2[cond, ]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>hrs<span class="fl">.1992</span> <span class="ot">&lt;-</span> hrs[cond,]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>hrsimp<span class="fl">.1992</span> <span class="ot">&lt;-</span> hrsimp[cond,]</span></code></pre></div>
+<p>Here is a preview of the dataset.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For saving running, we directly import the data here.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;./data/data_1992.RData&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tracker<span class="fl">.1992</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">HHID</th>
+<th align="left">PN</th>
+<th align="right">BIRTHMO</th>
+<th align="right">BIRTHYR</th>
+<th align="right">DEGREE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">000001</td>
+<td align="left">010</td>
+<td align="right">2</td>
+<td align="right">1938</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">000002</td>
+<td align="left">010</td>
+<td align="right">10</td>
+<td align="right">1934</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">000003</td>
+<td align="left">010</td>
+<td align="right">1</td>
+<td align="right">1936</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">000003</td>
+<td align="left">020</td>
+<td align="right">9</td>
+<td align="right">1938</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">010001</td>
+<td align="left">010</td>
+<td align="right">6</td>
+<td align="right">1939</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(hrs<span class="fl">.1992</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">HHIDPN</th>
+<th align="right">S1HHIDPN</th>
+<th align="right">R1MSTAT</th>
+<th align="right">R1MPART</th>
+<th align="right">S1BMONTH</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1010</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">2010</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">3010</td>
+<td align="right">3020</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="right">3020</td>
+<td align="right">3010</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">10001010</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(hrsimp<span class="fl">.1992</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>], <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">HHIDPN</th>
+<th align="right">S1HHIDPN</th>
+<th align="right">R1MSTAT</th>
+<th align="right">R1MPART</th>
+<th align="right">S2HHIDPN</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1010</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2010</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">3010</td>
+<td align="right">3020</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3020</td>
+</tr>
+<tr class="even">
+<td align="right">3020</td>
+<td align="right">3010</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3010</td>
+</tr>
+<tr class="odd">
+<td align="right">10001010</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="negative-wealth-shock" class="section level2">
+<h2>Negative Wealth Shock</h2>
+<p>There are covaiates in “RAND HRS Detailed Imputations File 2016 (V1)” that assess the wealth including housing, businesses, individual retirement accounts, checking and saving accounts, investment holdings, vehicles, and any other substantial assets. To measure negative wealth shock, we first adjusted all net worth values to 2016 dollars. Differences in net worth between two consecutive waves were used to calculate a negative wealth shock, defined as a loss of 75% or more in a participants’s household net worth.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>HwITOT <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;H1ITOT&quot;</span>,<span class="st">&quot;H2ITOT&quot;</span>,<span class="st">&quot;H3ITOT&quot;</span>,<span class="st">&quot;H4ITOT&quot;</span>,<span class="st">&quot;H5ITOT&quot;</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;H6ITOT&quot;</span>,<span class="st">&quot;H7ITOT&quot;</span>,<span class="st">&quot;H8ITOT&quot;</span>,<span class="st">&quot;H9ITOT&quot;</span>,<span class="st">&quot;H10ITOT&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;H11ITOT&quot;</span>,<span class="st">&quot;H12ITOT&quot;</span>,<span class="st">&quot;H13ITOT&quot;</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>HwSHOCK <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;H1SHOCK&quot;</span>,<span class="st">&quot;H2SHOCK&quot;</span>,<span class="st">&quot;H3SHOCK&quot;</span>,<span class="st">&quot;H4SHOCK&quot;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;H5SHOCK&quot;</span>,<span class="st">&quot;H6SHOCK&quot;</span>,<span class="st">&quot;H7SHOCK&quot;</span>,<span class="st">&quot;H8SHOCK&quot;</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;H9SHOCK&quot;</span>,<span class="st">&quot;H10SHOCK&quot;</span>,<span class="st">&quot;H11SHOCK&quot;</span>,<span class="st">&quot;H12SHOCK&quot;</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>inflation <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.71</span>, <span class="fl">1.62</span>, <span class="fl">1.53</span>, <span class="fl">1.47</span>, <span class="fl">1.39</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>               <span class="fl">1.33</span>, <span class="fl">1.27</span>, <span class="fl">1.19</span>, <span class="fl">1.11</span>, <span class="fl">1.10</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>               <span class="fl">1.05</span>, <span class="fl">1.01</span>, <span class="fl">1.0</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>wealth <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span>(hrsimp<span class="fl">.1992</span>,HHIDPN, HwITOTA) <span class="sc">%&gt;%</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">H1NET  =</span>  <span class="fl">1.71</span><span class="sc">*</span>(H1ATOTA),</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">H2NET  =</span>  <span class="fl">1.62</span><span class="sc">*</span>(H2ATOTA),</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">H3NET  =</span>  <span class="fl">1.53</span><span class="sc">*</span>(H3ATOTA),</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">H4NET  =</span>  <span class="fl">1.47</span><span class="sc">*</span>(H4ATOTA),</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">H5NET  =</span>  <span class="fl">1.39</span><span class="sc">*</span>(H5ATOTA),</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">H6NET  =</span>  <span class="fl">1.33</span><span class="sc">*</span>(H6ATOTA),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">H7NET  =</span>  <span class="fl">1.27</span><span class="sc">*</span>(H7ATOTA),</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">H8NET  =</span>  <span class="fl">1.19</span><span class="sc">*</span>(H8ATOTA),</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">H9NET  =</span>  <span class="fl">1.11</span><span class="sc">*</span>(H9ATOTA),</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">H10NET =</span>  <span class="fl">1.10</span><span class="sc">*</span>(H10ATOTA),</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>          <span class="at">H11NET =</span>  <span class="fl">1.05</span><span class="sc">*</span>(H11ATOTA),</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>          <span class="at">H12NET =</span>  <span class="fl">1.01</span><span class="sc">*</span>(H12ATOTA),</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>          <span class="at">H13NET =</span>  <span class="fl">1.00</span><span class="sc">*</span> H13ATOTA) <span class="sc">%&gt;%</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(HHIDPN,HwNET) <span class="sc">%&gt;%</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">H1DIFF =</span> H1NET <span class="sc">-</span> H2NET,</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">H2DIFF =</span> H2NET <span class="sc">-</span> H3NET,</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>          <span class="at">H3DIFF =</span> H3NET <span class="sc">-</span> H4NET,</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>          <span class="at">H4DIFF =</span> H4NET <span class="sc">-</span> H5NET,</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>          <span class="at">H5DIFF =</span> H5NET <span class="sc">-</span> H6NET,</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">H6DIFF =</span> H6NET <span class="sc">-</span> H7NET,</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>          <span class="at">H7DIFF =</span> H7NET <span class="sc">-</span> H8NET,</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>          <span class="at">H8DIFF =</span> H8NET <span class="sc">-</span> H9NET,</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>          <span class="at">H9DIFF =</span> H9NET <span class="sc">-</span> H10NET,</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>          <span class="at">H10DIFF =</span> H10NET <span class="sc">-</span> H11NET,</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>          <span class="at">H11DIFF =</span> H11NET <span class="sc">-</span> H12NET,</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>          <span class="at">H12DIFF =</span> H12NET <span class="sc">-</span> H13NET) <span class="sc">%&gt;%</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">H1SHOCK =</span> <span class="fu">ifelse</span>(H1DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H1NET, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>          <span class="at">H2SHOCK =</span> <span class="fu">ifelse</span>(H2DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H2NET, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>          <span class="at">H3SHOCK =</span> <span class="fu">ifelse</span>(H3DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H3NET, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>          <span class="at">H4SHOCK =</span> <span class="fu">ifelse</span>(H4DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H4NET, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>          <span class="at">H5SHOCK =</span> <span class="fu">ifelse</span>(H5DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H5NET, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>          <span class="at">H6SHOCK =</span> <span class="fu">ifelse</span>(H6DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H6NET, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>          <span class="at">H7SHOCK =</span> <span class="fu">ifelse</span>(H7DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H7NET, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>          <span class="at">H8SHOCK =</span> <span class="fu">ifelse</span>(H8DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H8NET, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>          <span class="at">H9SHOCK =</span> <span class="fu">ifelse</span>(H9DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H9NET, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>          <span class="at">H10SHOCK =</span> <span class="fu">ifelse</span>(H10DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H10NET, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>          <span class="at">H11SHOCK =</span> <span class="fu">ifelse</span>(H11DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H11NET, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>          <span class="at">H12SHOCK =</span> <span class="fu">ifelse</span>(H12DIFF <span class="sc">&gt;=</span> <span class="fl">0.75</span><span class="sc">*</span>H12NET, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>wealth<span class="sc">$</span>SHOCKTOT <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>cond1 <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">is.na</span>(wealth[,HwSHOCK])) <span class="sc">!=</span> <span class="fu">ncol</span>(wealth[,HwSHOCK])</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>wealth<span class="sc">$</span>SHOCKTOT[cond1] <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(wealth[cond1,HwSHOCK], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>wealth<span class="sc">$</span>SHOCK <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(wealth<span class="sc">$</span>SHOCKTOT<span class="sc">==</span><span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>)</span></code></pre></div>
+<div id="all-cause-mortality" class="section level3">
+<h3>All-Cause Mortality</h3>
+<p>Mortality information can be found in the tracker file. It almost has all the information about death of the participants.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>death <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span>(tracker<span class="fl">.1992</span>, HHIDPN, KNOWNDECEASEDYR) <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">MORTALITY =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(KNOWNDECEASEDYR), <span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>( <span class="at">DEATHYR =</span> KNOWNDECEASEDYR) </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>death<span class="sc">$</span>YEAR <span class="ot">&lt;-</span> death<span class="sc">$</span>DEATHYR</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>death<span class="sc">$</span>YEAR[<span class="fu">is.na</span>(death<span class="sc">$</span>DEATHYR)] <span class="ot">&lt;-</span> tracker<span class="fl">.1992</span><span class="sc">$</span>LASTALIVEYR[<span class="fu">is.na</span>(death<span class="sc">$</span>DEATHYR)]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>wealth.mortality <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span>(</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind.data.frame</span>(wealth,death[,<span class="sc">-</span><span class="dv">1</span>]), HHIDPN, </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  SHOCKTOT, SHOCK,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  DEATHYR, MORTALITY, YEAR)</span></code></pre></div>
+</div>
+<div id="data-integration" class="section level3">
+<h3>Data integration</h3>
+<p>We removed the cases that doesn’t have enought information for negative wealth shock.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove cases that doesn&#39;t have enought information for negative wealth shock</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>cond2 <span class="ot">&lt;-</span> <span class="sc">!</span><span class="fu">is.na</span>(wealth.mortality<span class="sc">$</span>SHOCK) </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>rwshock <span class="ot">&lt;-</span> wealth[cond2, ]</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>wealth.mortality.final <span class="ot">&lt;-</span> wealth.mortality[cond2, ]</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>tracker.final <span class="ot">&lt;-</span> tracker<span class="fl">.1992</span>[cond2,]</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>hrs.final <span class="ot">&lt;-</span> hrs<span class="fl">.1992</span>[cond2, ]</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>hrsimp.final <span class="ot">&lt;-</span> hrsimp<span class="fl">.1992</span>[cond2, ]</span></code></pre></div>
+<p>Here is a preview of the final clean data.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For saving running, we directly import the data here.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;./data/data_12_01.RData&quot;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(wealth.mortality.final[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,], <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">HHIDPN</th>
+<th align="right">SHOCKTOT</th>
+<th align="right">SHOCK</th>
+<th align="right">DEATHYR</th>
+<th align="right">MORTALITY</th>
+<th align="right">YEAR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1010</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1995</td>
+<td align="right">1</td>
+<td align="right">1995</td>
+</tr>
+<tr class="even">
+<td align="right">2010</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">2001</td>
+<td align="right">1</td>
+<td align="right">2001</td>
+</tr>
+<tr class="odd">
+<td align="right">3010</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2013</td>
+<td align="right">1</td>
+<td align="right">2013</td>
+</tr>
+<tr class="even">
+<td align="right">3020</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2015</td>
+<td align="right">1</td>
+<td align="right">2015</td>
+</tr>
+<tr class="odd">
+<td align="right">10001010</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">2016</td>
+</tr>
+<tr class="even">
+<td align="right">10003020</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2000</td>
+<td align="right">1</td>
+<td align="right">2000</td>
+</tr>
+<tr class="odd">
+<td align="right">10004010</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2011</td>
+<td align="right">1</td>
+<td align="right">2011</td>
+</tr>
+<tr class="even">
+<td align="right">10013010</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">2016</td>
+<td align="right">1</td>
+<td align="right">2016</td>
+</tr>
+<tr class="odd">
+<td align="right">10038010</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">2016</td>
+</tr>
+<tr class="even">
+<td align="right">10050010</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">2016</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>HHIDPN</code>: Unique identifier</li>
+<li><code>SHOCKTOT</code>: Total number of negative wealth shock</li>
+<li><code>SHOCK</code>: An indicator function of whether experiencing negative wealth shock</li>
+<li><code>DEATHYR</code>: Year of death</li>
+<li><code>MORTALITY</code>: Dead or not</li>
+<li><code>YEAR</code>: Follow-up year</li>
+</ul>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
